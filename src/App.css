@@ -3,3 +3,21 @@
     margin: 0;
     box-sizing: border-box;
 }
+
+.app {
+    background-color: #fafafa;
+}
+
+.app__header {
+    padding: 10px 20px;
+    background-color: #fff;
+    object-fit: contain;
+    border-bottom: 1px solid lightgray;
+    object-fit: contain;
+    margin-bottom: 30px;
+}
+
+.app__signup {
+    display: flex;
+    flex-direction: column;
+}
