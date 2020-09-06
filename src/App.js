@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Post from './Components/Post';
-import { db, auth, storage } from './firebase';
+import { db, auth } from './firebase';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { Button, Input } from '@material-ui/core';
+import ImageUpload from './Components/ImageUpload';
+import InstagramEmbed from 'react-instagram-embed';
 
 function getModalStyle() {
     const top = 50;
@@ -54,27 +56,30 @@ function App() {
     }, [user, username]);
 
     useEffect(() => {
-        db.collection('posts').onSnapshot((snapshot) => {
-            setPosts(
-                snapshot.docs.map((doc) => {
-                    return {
-                        id: doc.id,
-                        post: doc.data(),
-                    };
-                })
-            );
-        });
+        db.collection('posts')
+            .orderBy('timestamp', 'desc')
+            .onSnapshot((snapshot) => {
+                setPosts(
+                    snapshot.docs.map((doc) => {
+                        return {
+                            id: doc.id,
+                            post: doc.data(),
+                        };
+                    })
+                );
+            });
     }, []);
 
     const signUp = (event) => {
         event.preventDefault();
         auth.createUserWithEmailAndPassword(email, password)
-            .then((auth) => {
-                return auth.user.updateProfile({
+            .then((authUser) => {
+                return authUser.user.updateProfile({
                     displayName: username,
                 });
             })
             .catch((error) => alert(error.message));
+        setOpen(false);
     };
 
     const signIn = (event) => {
@@ -84,6 +89,7 @@ function App() {
         );
         setOpenSignIn(false);
     };
+    console.log(user);
 
     return (
         <div className="app">
@@ -131,7 +137,6 @@ function App() {
                                 className="app__header--img"
                             />
                         </center>
-
                         <Input
                             placeholder="Email"
                             type="text"
@@ -157,25 +162,49 @@ function App() {
                     alt="logo"
                     className="app__header--img"
                 />
+                {user ? (
+                    <Button onClick={() => auth.signOut()}>Sign Out</Button>
+                ) : (
+                    <div className="app__loginContainer">
+                        <Button onClick={() => setOpenSignIn(true)}>
+                            Sign In
+                        </Button>
+
+                        <Button onClick={() => setOpen(true)}>Sign Up</Button>
+                    </div>
+                )}
             </div>
-
-            {user ? (
-                <Button onClick={() => auth.signOut()}>Sign Out</Button>
-            ) : (
-                <div className="app__loginContainer">
-                    <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
-
-                    <Button onClick={() => setOpen(true)}>Sign Up</Button>
+            <div className="app__post">
+                <div className="app__post--left">
+                    {posts.map(({ id, post }) => (
+                        <Post
+                            key={id}
+                            username={post.username}
+                            caption={post.caption}
+                            imageUrl={post.imageUrl}
+                        />
+                    ))}
                 </div>
+                <div className="app__post--right">
+                    <InstagramEmbed
+                        url="https://www.instagram.com/p/CCt6qmgJWAm/"
+                        maxWidth={320}
+                        hideCaption={false}
+                        containerTagName="div"
+                        protocol=""
+                        injectScript
+                        onLoading={() => {}}
+                        onSuccess={() => {}}
+                        onAfterRender={() => {}}
+                        onFailure={() => {}}
+                    />
+                </div>
+            </div>
+            {user?.displayName ? (
+                <ImageUpload username={user.displayName} />
+            ) : (
+                <h3>Login to upload</h3>
             )}
-            {posts.map(({ id, post }) => (
-                <Post
-                    key={id}
-                    username={post.username}
-                    caption={post.caption}
-                    imageUrl={post.imageUrl}
-                />
-            ))}
         </div>
     );
 }

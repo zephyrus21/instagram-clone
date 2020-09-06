@@ -14,7 +14,22 @@
     object-fit: contain;
     border-bottom: 1px solid lightgray;
     object-fit: contain;
-    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.app__post {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.app__post--right {
+    margin-left: 30px;
+}
+
+.app__header--img {
+    object-fit: contain;
 }
 
 .app__signup {
