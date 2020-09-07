@@ -175,30 +175,16 @@ function App() {
                 )}
             </div>
             <div className="app__post">
-                <div className="app__post--left">
-                    {posts.map(({ id, post }) => (
-                        <Post
-                            key={id}
-                            username={post.username}
-                            caption={post.caption}
-                            imageUrl={post.imageUrl}
-                        />
-                    ))}
-                </div>
-                <div className="app__post--right">
-                    <InstagramEmbed
-                        url="https://www.instagram.com/p/CCt6qmgJWAm/"
-                        maxWidth={320}
-                        hideCaption={false}
-                        containerTagName="div"
-                        protocol=""
-                        injectScript
-                        onLoading={() => {}}
-                        onSuccess={() => {}}
-                        onAfterRender={() => {}}
-                        onFailure={() => {}}
+                {posts.map(({ id, post }) => (
+                    <Post
+                        user={user}
+                        key={id}
+                        postId={id}
+                        username={post.username}
+                        caption={post.caption}
+                        imageUrl={post.imageUrl}
                     />
-                </div>
+                ))}
             </div>
             {user?.displayName ? (
                 <ImageUpload username={user.displayName} />

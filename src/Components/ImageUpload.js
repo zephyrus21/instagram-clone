@@ -58,12 +58,17 @@ const ImageUpload = (props) => {
                 max="100"
             />
             <input
+                className="imageupload__input"
                 type="text"
                 placeholder="Enter a Caption"
                 onChange={(event) => setCaption(event.target.value)}
                 value={caption}
             />
-            <input type="file" onChange={handleChange} />
+            <input
+                className="imageupload__button"
+                type="file"
+                onChange={handleChange}
+            />
             <Button onClick={handleUpload}>Upload</Button>
         </div>
     );

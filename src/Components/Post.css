@@ -26,3 +26,28 @@
     font-weight: normal;
     padding: 16px;
 }
+
+.post__comments {
+    font-weight: normal;
+    padding: 16px;
+}
+
+.post__comment {
+    display: flex;
+    border-top: 1px solid lightgray;
+    padding: 10px;
+}
+
+.post__button {
+    flex: 0;
+    border: none;
+    color: #0095f6;
+    background-color: transparent;
+}
+
+.post__input {
+    flex: 1;
+    border: none;
+    background-color: #fafafa;
+    outline: none;
+}
